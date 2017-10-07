@@ -61,12 +61,30 @@ class ChickenScreen extends React.Component {
     static navigationOptions = {
         title: 'Chicken',
     };
+
+    state = {
+        chickenJson: null
+    }
+
+    _getChickenInfo = async (location) => { // When we set up a server, we will actually use location
+        // currently reading off a json file to simulate retrieving from Yelp
+        // reason for this is that we do not have a server set up and we do not want to
+        // expose our API key
+        this.state.chickenJson = require('./assets/chicken.json')['businesses'];
+    }
+
+    componentWillMount() {
+        this._getChickenInfo(this.state.location);
+    }
+
     render() {
         const { params } = this.props.navigation.state;
         text = JSON.stringify(params.location['coords']);
+        chickenText = JSON.stringify(this.state.chickenJson);
         return (
             <View>
                 <Text> Chat with {text} </Text>
+                <Text> {chickenText} </Text>
             </View>
         );
     }
