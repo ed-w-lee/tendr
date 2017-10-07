@@ -1,76 +1,88 @@
-import React, {Component} from 'react';
-import {Text} from 'react-native';
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+import React from 'react';
+import { Platform, Text, View, StyleSheet, Button } from 'react-native';
+import { Constants, Location, Permissions } from 'expo';
+import {
+    StackNavigator
+} from 'react-navigation'; // 1.0.0-beta.13
 
-class SomeComponent extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            myText: 'I\'m ready to get swiped!',
-            gestureName: 'none',
-            backgroundColor: '#fff'
-        };
+class HomeScreen extends React.Component {
+    static navigationOptions = {
+        title: 'Welcome',
+    };
+
+    state = {
+        location: null,
+        errorMessage: null,
     }
 
-    onSwipeUp() {
-        this.setState({myText: 'You swiped up!'});
-    }
-
-    onSwipeDown() {
-        this.setState({myText: 'You swiped down!'});
-    }
-
-    onSwipeLeft() {
-        this.setState({myText: 'You swiped left!'});
-    }
-
-    onSwipeRight() {
-        this.setState({myText: 'You swiped right!'});
-    }
-
-    onSwipe(gestureName) {
-        const {SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
-        this.setState({gestureName: gestureName});
-        switch (gestureName) {
-            case SWIPE_UP:
-                break;
-            case SWIPE_DOWN:
-                break;
-            case SWIPE_LEFT:
-                this.setState({backgroundColor: 'blue'});
-                break;
-            case SWIPE_RIGHT:
-                this.setState({backgroundColor: 'yellow'});
-                break;
+    componentWillMount() {
+        if (Platform.OS === 'android' && !Constants.isDevice) {
+            this.setState({
+                errorMessage: 'Oops, this will not work on Sketch.'
+            });
+        } else {
+            this._getLocationAsync();
         }
     }
 
+    _getLocationAsync = async () => {
+        let { status } = await Permissions.askAsync(Permissions.LOCATION);
+        if (status !== 'granted') {
+            this.setState({
+                errorMessage: 'Permission to access location was denied',
+            });
+        }
+
+        let location = await Location.getCurrentPositionAsync({});
+        this.setState({ location });
+    };
+
     render() {
-
-        const config = {
-            velocityThreshold: 0.15,
-            directionalOffsetThreshold: 350
-        };
-
+        let text = 'Waiting..';
+        if (this.state.errorMessage) {
+            text = this.state.errorMessage;
+        } else if (this.state.location) {
+            text = JSON.stringify(this.state.location);
+        }
+        const { navigate } = this.props.navigation;
         return (
-                <GestureRecognizer
-                onSwipe={(direction, state) => this.onSwipe(direction, state)}
-                onSwipeUp={(state) => this.onSwipeUp(state)}
-                onSwipeDown={(state) => this.onSwipeDown(state)}
-                onSwipeLeft={(state) => this.onSwipeLeft(state)}
-                onSwipeRight={(state) => this.onSwipeRight(state)}
-                config={config}
-                style={{
-                    flex: 1,
-                    backgroundColor: this.state.backgroundColor
-                }}
-                >
-                <Text>{this.state.myText}</Text>
-                <Text>onSwipe callback received gesture: {this.state.gestureName}</Text>
-                </GestureRecognizer>
-               );
+            <Button
+            title="Let's go get chicken!"
+            onPress={() => 
+            navigate('Chicken', {location: this.state.location})
+            }
+            />
+        );
     }
 }
 
-export default SomeComponent;
+class ChickenScreen extends React.Component {
+    static navigationOptions = {
+        title: 'Chicken',
+    };
+    render() {
+        const { params } = this.props.navigation.state;
+        text = JSON.stringify(params.location['coords']);
+        return (
+            <View>
+                <Text> Chat with {text} </Text>
+            </View>
+        );
+    }
+}
+
+const SimpleApp = StackNavigator({
+    Home: {
+        screen: HomeScreen
+    },
+    Chicken: {
+        screen: ChickenScreen
+    },
+});
+
+export default class App extends React.Component {
+    render() {
+        return <SimpleApp />;
+    }
+}
