@@ -5,6 +5,7 @@ import { Constants, Location, Permissions } from 'expo';
 
 import {
     StackNavigator
+
 } from 'react-navigation'; // 1.0.0-beta.13
 
 class HomeScreen extends React.Component {
