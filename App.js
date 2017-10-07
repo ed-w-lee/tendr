@@ -1,12 +1,12 @@
 import React from 'react';
-import { Platform, Text, View, StyleSheet, Button } from 'react-native';
+import { Platform, Text, View, Button, Image, StyleSheet } from 'react-native';
 import { Constants, Location, Permissions } from 'expo';
 import {
     StackNavigator
 } from 'react-navigation'; // 1.0.0-beta.13
 
-
 class HomeScreen extends React.Component {
+    
     static navigationOptions = {
         title: 'Welcome',
     };
@@ -37,8 +37,11 @@ class HomeScreen extends React.Component {
         let location = await Location.getCurrentPositionAsync({});
         this.setState({ location });
     };
-
+    
     render() {
+        
+        
+        
         let text = 'Waiting..';
         if (this.state.errorMessage) {
             text = this.state.errorMessage;
@@ -46,13 +49,23 @@ class HomeScreen extends React.Component {
             text = JSON.stringify(this.state.location);
         }
         const { navigate } = this.props.navigation;
+        
+        
+        
         return (
+            <View>
+                <Image source={{uri: 'https://scontent-lax3-2.xx.fbcdn.net/v/t35.0-12/22323708_1463306457099469_1587138_o.png?oh=fa403b4ec107b74f588cf11bdd189ca3&oe=59DAD5C5'}}
+                resizeMode={'contain'}
+                style={styles.fit}
+            />
+            
             <Button
             title="Let's go get chicken!"
             onPress={() => 
             navigate('Chicken', {location: this.state.location})
             }
             />
+            </View>
         );
     }
 }
@@ -63,14 +76,21 @@ class ChickenScreen extends React.Component {
     };
     render() {
         const { params } = this.props.navigation.state;
-        text = JSON.stringify(params.location['coords']);
+        let text = JSON.stringify(params.location['coords']);
         return (
-            <View>
+            <View>  
                 <Text> Chat with {text} </Text>
             </View>
         );
     }
 }
+
+const styles = StyleSheet.create({
+  fit: {
+    width: 360,
+    height: 148,
+  }
+});
 
 const SimpleApp = StackNavigator({
     Home: {
