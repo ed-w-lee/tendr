@@ -81,7 +81,7 @@ class ChickenScreen extends React.Component {
 
     state = {
         chickenJson: null,
-        Cards: []
+        Cards: ['nnn']
     }
 
     verticalSwipe = false;
@@ -91,29 +91,38 @@ class ChickenScreen extends React.Component {
         // currently reading off a json file to simulate retrieving from Yelp
         // reason for this is that we do not have a server set up and we do not want to
         // expose our API key
+        console.log(location);
+        if(!location){
+            return;
+        }
         console.log(location["coords"]);
         console.log(JSON.parse(JSON.stringify(location))["coords"]);
         let coords = location["coords"];
-        this.state.chickenJson = JSON.parse(fetch('https://70781c6e.ngrok.io?latitude='+coords['latitude']+'&longitude'+coords['longitude'] ));
-        Cards = (this.state.chickenJson['businesses'])
+
+        let temp = await fetch('https://b82a54b1.ngrok.io?latitude='+coords['latitude']+'&longitude='+coords['longitude'] )
+        .then((response)=>response.json())
+        .then((responseJson)=>{
+            return responseJson.businesses;
+            });
+        this.setState({chickenJson:temp});
+        console.log("ChickenJson -----> ");
+        console.log(this.state.chickenJson);
+        this.setState({Cards:this.state.chickenJson});
+        console.log("this.state.Cards ->\n\n\n\n\n ");
+        console.log(this.state.Cards);
         }
 
-    componentWillMount() {
-        console.log("will mount: " + this.props.navigation.state.user);
-        console.log("will mount: " + this.props.navigation.state.location);
-        console.log("will mount: " + this.props.navigation.state.stringLocation);
-        console.log(JSON.stringify(this.props.navigation.state.location));
-    }
-
-    render() {
+componentWillMount(){
         const { params } = this.props.navigation.state;
         console.log("Render : " + params.user);
         console.log("Render : " + params.location);
         console.log("Render : " + params.stringLocation);
         console.log(JSON.stringify(params.location));
-        this._getChickenInfo(this.props.navigation.state.location);
+        this._getChickenInfo(params.location);
+};
 
-        //TODO change string to food[0]['businesses']
+    render() {
+                //TODO change string to food[0]['businesses']
         //TODO change name to card['name']
 
         return (
@@ -129,7 +138,7 @@ class ChickenScreen extends React.Component {
                     renderCard={(card) => {
                         return (
                             <View style={styles.card}>
-                                <Text style={styles.title}>{card}</Text>
+                                <Text style={styles.title}>{card.name}</Text>
                             </View>
                         )
                     }}
