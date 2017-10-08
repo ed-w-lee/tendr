@@ -91,6 +91,8 @@ class ChickenScreen extends React.Component {
         chickenJson: null
     }
 
+    verticalSwipe = false;
+
 
     _getChickenInfo = async (location) => { // When we set up a server, we will actually use location
         // currently reading off a json file to simulate retrieving from Yelp
@@ -112,6 +114,7 @@ class ChickenScreen extends React.Component {
         return (
                 <View style={styles.container}>
                 <Swiper
+                verticalSwipe = {false}
                    cards={['DOMINO\'S PIZZA', 'POPEYES LOUISIANA']}
                 renderCard={(card) => {
                     return (
@@ -124,14 +127,9 @@ class ChickenScreen extends React.Component {
                            )
                 }}
                 onSwiped={(cardIndex) => {console.log(cardIndex)}}
-                onSwipedAll={() => {console.log('onSwipedAll')}}
+
                 cardIndex={0}
                 backgroundColor={'#4FD0E9'}>
-                <Button
-                onPress={() => {console.log('oulala')}}
-                title="Press me">
-                You can press me
-                </Button>
                 </Swiper>
 
                 </View>
