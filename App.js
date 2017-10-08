@@ -104,18 +104,22 @@ class ChickenScreen extends React.Component {
         this._getChickenInfo(this.props.navigation.state.location);
     }
 
-
     render() {
         const { params } = this.props.navigation.state;
+                //TODO change string to food[0]['businesses']
+                            //TODO change name to card['name']
 
         return (
                 <View style={styles.container}>
                 <Swiper
-                cards={['DO', 'MORE', 'OF', 'WHAT', 'MAKES', 'YOU', 'HAPPY']}
+                   cards={['DOMINO\'S PIZZA', 'POPEYES LOUISIANA']}
                 renderCard={(card) => {
                     return (
                             <View style={styles.card}>
-                            <Text style={styles.text}>{card}</Text>
+                            <Text style={styles.title}>{card}</Text>
+                            <Image source={{uri: 'https://s3-media4.fl.yelpcdn.com/bphoto/8T2efLPtg5s56BeRCYStfw/o.jpg'}}
+                            style={styles.centerCard} />
+
                             </View>
                            )
                 }}
@@ -150,16 +154,32 @@ const styles = StyleSheet.create({
     },
     card: {
         flex: 1,
+        flexDirection: 'column',
         borderRadius: 4,
         borderWidth: 2,
         borderColor: '#E8E8E8',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         backgroundColor: 'white',
     },
     text: {
         textAlign: 'center',
         fontSize: 50,
         backgroundColor: 'transparent'
+    },
+    title: {
+        textAlign: 'center',
+        fontSize: 50,
+        backgroundColor: 'transparent'
+    },
+    centerCard: {
+        flex: 2,
+        flexDirection: 'row',
+        alignContent: 'center',
+        alignItems: 'center',
+        borderRadius: 3,
+        borderWidth: 1,
+        width: 315,
+        height: 150
     }
 
 });
