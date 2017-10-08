@@ -60,7 +60,7 @@ class HomeScreen extends React.Component {
 
                 <TouchableHighlight style={{ flex: 1 }}
                     onPress={() =>
-                        navigate('Chicken', { location: this.state.location, stringLocation: JSON.stringify(this.state.location) })} >
+                        navigate('Chicken', { user: 'Lucy', location: this.state.location, stringLocation: JSON.stringify(this.state.location) })} >
 
                     <Image source={{ uri: 'https://scontent-lax3-2.xx.fbcdn.net/v/t34.0-12/22359145_1463978777032237_1019828485_n.png?oh=2bef57f36b622cb5e24eea2566016184&oe=59DB697E' }}
                         style={styles.fit} />
@@ -99,6 +99,7 @@ class ChickenScreen extends React.Component {
         }
 
     componentWillMount() {
+        console.log(this.props.navigation.state.user);
         console.log(this.props.navigation.state.location);
         console.log(this.props.navigation.state.stringLocation);
         console.log(JSON.stringify(this.props.navigation.state.location));
@@ -108,6 +109,11 @@ class ChickenScreen extends React.Component {
 
     render() {
         const { params } = this.props.navigation.state;
+        console.log(params.user);
+        console.log(params.location);
+        console.log(params.stringLocation);
+        console.log(JSON.stringify(params.location));
+
         //TODO change string to food[0]['businesses']
         //TODO change name to card['name']
 
