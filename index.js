@@ -19,7 +19,7 @@ function getAccessToken() {
 }
 
 getAccessToken();
-var requestLoop = setInterval(function() {getAccessToken()}, 10 * 1000);
+var requestLoop = setInterval(function() {getAccessToken()}, 24 * 60 * 60 * 1000);
 
 
 app.get('/', (req, res) => {
