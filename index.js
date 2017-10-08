@@ -7,6 +7,7 @@ var access_token;
 
 function getAccessToken() {
 
+console.log("Refreshing access token.");
 request.post({
         url: 'https://api.yelp.com/oauth2/token',
         form: {
@@ -24,6 +25,7 @@ var requestLoop = setInterval(function() {getAccessToken()}, 60 * 60 * 10 * 1000
 
 
 app.get('/', (req, res) => {
+    console.log("Received request");
     request.get({
         url: 'https://api.yelp.com/v3/businesses/search',
         qs: {
@@ -45,4 +47,6 @@ app.get('/', (req, res) => {
     });
 });
 
-app.listen(3000);
+app.listen(3000, '0.0.0.0', function() {
+    console.log('Listening to port: ' + 3000);
+});
