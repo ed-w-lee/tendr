@@ -139,6 +139,8 @@ componentWillMount(){
                         return (
                             <View style={styles.card}>
                                 <Text style={styles.title}>{card.name}</Text>
+                                <Image source={{ uri: card.image_url }}
+                                style={styles.centerCard} />
                             </View>
                         )
                     }}
