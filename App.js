@@ -1,10 +1,11 @@
 import React from 'react';
 import Swiper from 'react-native-deck-swiper';
-import { Platform, Text, View, Button, Image, StyleSheet } from 'react-native';
+import {TouchableHighlight, Platform, Text, View, Button, Image, StyleSheet } from 'react-native';
 import { Constants, Location, Permissions } from 'expo';
 
 import {
     StackNavigator
+
 
 } from 'react-navigation'; // 1.0.0-beta.13
 
@@ -16,6 +17,7 @@ class HomeScreen extends React.Component {
     state = {
         location: null,
         errorMessage: null,
+
     }
 
 
@@ -23,8 +25,6 @@ class HomeScreen extends React.Component {
         if (Platform.OS === 'android' && !Constants.isDevice) {
             this.setState({
                 errorMessage: 'Oops, this will not work on Sketch.'
-
-
             });
         } else {
             this._getLocationAsync();
@@ -62,29 +62,28 @@ class HomeScreen extends React.Component {
 
 
         return (
-                <View>
-                <Image source={{uri: 'https://scontent-lax3-2.xx.fbcdn.net/v/t35.0-12/22323708_1463306457099469_1587138_o.png?oh=fa403b4ec107b74f588cf11bdd189ca3&oe=59DAD5C5'}}
-                resizeMode={'contain'}
-                style={styles.fit}
-                />
+                <View style={{flex:1}}>
 
-                <Button
-                title="Let's go get chicken!"
+                <TouchableHighlight style={{flex: 1}}
                 onPress={() =>
-                    navigate('Chicken', {location: this.state.location})
+                    navigate('Chicken', {location: this.state.location})} >
 
-                }
-                />
-                </View>
+                    <Image source={{uri: 'https://scontent-lax3-2.xx.fbcdn.net/v/t34.0-12/22359145_1463978777032237_1019828485_n.png?oh=2bef57f36b622cb5e24eea2566016184&oe=59DB697E' }}
+                    style={styles.fit} />
+                    </TouchableHighlight>
+
+                    </View>
                );
 
     }
+
+
 }
 
 class ChickenScreen extends React.Component {
+
     static navigationOptions = {
         title: 'Chicken',
-
     };
 
     state = {
@@ -108,14 +107,19 @@ class ChickenScreen extends React.Component {
 
     render() {
         const { params } = this.props.navigation.state;
-                //TODO change string to food[0]['businesses']
-                            //TODO change name to card['name']
+        //TODO change string to food[0]['businesses']
+        //TODO change name to card['name']
 
         return (
                 <View style={styles.container}>
+
+                <Image source={{uri: 'https://media.giphy.com/media/VofiGkwOdH2fu/200.gif'}}
+                style={styles.fit} />
+
+
                 <Swiper
                 verticalSwipe = {false}
-                   cards={['DOMINO\'S PIZZA', 'POPEYES LOUISIANA']}
+                cards={['DOMINO\'S PIZZA', 'POPEYES LOUISIANA']}
                 renderCard={(card) => {
                     return (
                             <View style={styles.card}>
@@ -130,10 +134,10 @@ class ChickenScreen extends React.Component {
 
                 cardIndex={0}
                 backgroundColor={'#4FD0E9'}>
-                </Swiper>
+                    </Swiper>
 
-                </View>
-                );
+                    </View>
+                    );
 
     }
 
@@ -142,9 +146,7 @@ class ChickenScreen extends React.Component {
 
 const styles = StyleSheet.create({
     fit: {
-        width: 360,
-        height: 148,
-
+        flex: 1,
     },
     container: {
         flex: 1,
@@ -192,9 +194,10 @@ const SimpleApp = StackNavigator({
     Chicken: {
         screen: ChickenScreen
 
-    },
-
-});
+    }
+},
+{headerMode:'none'}
+);
 
 
 export default class App extends React.Component {
