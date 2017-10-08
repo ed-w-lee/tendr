@@ -102,7 +102,7 @@ class ChickenScreen extends React.Component {
         console.log("will mount: " + this.props.navigation.state.user);
         console.log("will mount: " + this.props.navigation.state.location);
         console.log("will mount: " + this.props.navigation.state.stringLocation);
-        console.log(JSON.stringify("will mount: " + this.props.navigation.state.location));
+        console.log(JSON.stringify(this.props.navigation.state.location));
     }
 
     render() {
@@ -110,7 +110,7 @@ class ChickenScreen extends React.Component {
         console.log("Render : " + params.user);
         console.log("Render : " + params.location);
         console.log("Render : " + params.stringLocation);
-        console.log(JSON.stringify("Render : " + params.location));
+        console.log(JSON.stringify(params.location));
         this._getChickenInfo(this.props.navigation.state.location);
 
         //TODO change string to food[0]['businesses']
