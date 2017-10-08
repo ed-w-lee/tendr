@@ -52,7 +52,7 @@ class HomeScreen extends React.Component {
             text = JSON.stringify(this.state.location);
         }
         const { navigate } = this.props.navigation;
-
+        console.log('--->'+JSON.stringify(this.state.location));
 
 
         return (
@@ -68,7 +68,6 @@ class HomeScreen extends React.Component {
 
             </View>
         );
-
     }
 
 
@@ -81,7 +80,8 @@ class ChickenScreen extends React.Component {
     };
 
     state = {
-        chickenJson: null
+        chickenJson: null,
+        Cards: []
     }
 
     verticalSwipe = false;
@@ -91,17 +91,14 @@ class ChickenScreen extends React.Component {
         // currently reading off a json file to simulate retrieving from Yelp
         // reason for this is that we do not have a server set up and we do not want to
         // expose our API key
-        this.state.chickenJson = fetch('10.105.223.72:3000', {
-            method: 'GET',
-            body: JSON.stringify({
-                latitude: location['latitude'],
-                longitude: location['longitude']
-            })
-        });
-    }
+        let coords = location["coords"];
+        this.state.chickenJson = JSON.parse(fetch('https://70781c6e.ngrok.io?latitude='+coords['latitude']+'&longitude'+coords['longitude'] ));
+        Cards = (this.state.chickenJson['businesses'])
+        }
 
     componentWillMount() {
         this._getChickenInfo(this.props.navigation.state.location);
+        console.log(this.props.navigation.state.location);
     }
 
     render() {
@@ -118,14 +115,11 @@ class ChickenScreen extends React.Component {
 
                 <Swiper
                     verticalSwipe={false}
-                    cards={this.state.chickenJson['businesses']}
+                    cards={this.state.Cards}
                     renderCard={(card) => {
                         return (
                             <View style={styles.card}>
                                 <Text style={styles.title}>{card}</Text>
-                                <Image source={{ uri: 'https://s3-media4.fl.yelpcdn.com/bphoto/8T2efLPtg5s56BeRCYStfw/o.jpg' }}
-                                    style={styles.centerCard} />
-
                             </View>
                         )
                     }}
