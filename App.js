@@ -60,7 +60,7 @@ class HomeScreen extends React.Component {
 
                 <TouchableHighlight style={{ flex: 1 }}
                     onPress={() =>
-                        navigate('Chicken', { user: 'Lucy', location: this.state.location, stringLocation: JSON.stringify(this.state.location) })} >
+                        navigate('Chicken', { location: this.state.location, stringLocation: JSON.stringify(this.state.location) })} >
 
                     <Image source={{ uri: 'https://scontent-lax3-2.xx.fbcdn.net/v/t34.0-12/22359145_1463978777032237_1019828485_n.png?oh=2bef57f36b622cb5e24eea2566016184&oe=59DB697E' }}
                         style={styles.fit} />
@@ -86,33 +86,23 @@ class ChickenScreen extends React.Component {
 
     verticalSwipe = false;
 
-
     _getChickenInfo = async (location) => { // When we set up a server, we will actually use location
         // currently reading off a json file to simulate retrieving from Yelp
         // reason for this is that we do not have a server set up and we do not want to
         // expose our API key
-        console.log(location["coords"]);
-        console.log(JSON.parse(JSON.stringify(location))["coords"]);
         let coords = location["coords"];
+        console.log(coords['latitude'] + ', ' + coords['longitude']);
         this.state.chickenJson = JSON.parse(fetch('https://70781c6e.ngrok.io?latitude='+coords['latitude']+'&longitude'+coords['longitude'] ));
         Cards = (this.state.chickenJson['businesses'])
         }
 
-    componentWillMount() {
-        console.log(this.props.navigation.state.user);
-        console.log(this.props.navigation.state.location);
-        console.log(this.props.navigation.state.stringLocation);
-        console.log(JSON.stringify(this.props.navigation.state.location));
-
-        this._getChickenInfo(this.props.navigation.state.location);
-    }
-
     render() {
         const { params } = this.props.navigation.state;
-        console.log(params.user);
-        console.log(params.location);
-        console.log(params.stringLocation);
-        console.log(JSON.stringify(params.location));
+        console.log("Render : " + params.user);
+        console.log("Render : " + params.location);
+        console.log("Render : " + params.stringLocation);
+        console.log(JSON.stringify("Render : " + params.location));
+        this._getChickenInfo(this.props.navigation.state.location);
 
         //TODO change string to food[0]['businesses']
         //TODO change name to card['name']
