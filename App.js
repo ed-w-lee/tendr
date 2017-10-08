@@ -211,7 +211,6 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign: 'center',
-        fontFamily: 'sans-serif',
         fontSize: 50,
         backgroundColor: 'transparent'
     },
