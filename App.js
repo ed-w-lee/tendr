@@ -1,7 +1,7 @@
 import React from 'react';
 import Swiper from 'react-native-deck-swiper';
 import { TouchableHighlight, Platform, Text, View, Button, Image, StyleSheet } from 'react-native';
-import { Constants, Location, Permissions } from 'expo';
+import { Constants, Location, Permissions, WebBrowser } from 'expo';
 import {
     StackNavigator
 } from 'react-navigation'; // 1.0.0-beta.13
@@ -99,7 +99,7 @@ class ChickenScreen extends React.Component {
         console.log(JSON.parse(JSON.stringify(location))["coords"]);
         let coords = location["coords"];
 
-        let temp = await fetch('https://b82a54b1.ngrok.io?latitude='+coords['latitude']+'&longitude='+coords['longitude'] )
+        let temp = await fetch('https://ca5a937a.ngrok.io?latitude='+coords['latitude']+'&longitude='+coords['longitude'] )
         .then((response)=>response.json())
         .then((responseJson)=>{
             return responseJson.businesses;
@@ -124,12 +124,10 @@ componentWillMount(){
     render() {
                 //TODO change string to food[0]['businesses']
         //TODO change name to card['name']
-
+        const { navigate } = this.props.navigation;
         return (
             <View style={styles.container}>
 
-                <Image source={{ uri: 'https://media.giphy.com/media/VofiGkwOdH2fu/200.gif' }}
-                    style={styles.fit} />
 
 
                 <Swiper
@@ -144,8 +142,20 @@ componentWillMount(){
                             </View>
                         )
                     }}
-                    onSwiped={(cardIndex) => { console.log(cardIndex) }}
 
+                    onSwipedRight={(cardindex) => {
+                        navigate('FinalScreen', {place: this.state.Cards[cardindex]})
+                        console.log('RIGHT');
+                    }}
+
+                    onSwiped={(cardIndex) => { console.log(cardIndex) }}
+                    onSwipedAll={() => {
+                        <View>
+                        <Image source={{ uri: 'https://m.popkey.co/a66c16/46E01.gif'}}
+                        style ={{flex: 1}} />
+                        </View>
+                        console.log('onSwipedAll');
+                        }}
                     cardIndex={0}
                     backgroundColor={'#4FD0E9'}>
                 </Swiper>
@@ -156,6 +166,25 @@ componentWillMount(){
     }
 
 
+}
+class FinalScreen extends React.Component {
+    static navigationOptions = {
+        title: 'Restaurant',
+    };
+    render() {
+        const { params } = this.props.navigation.state;
+        return (
+            <View style={styles.container}>
+            <Button style={{flex: 1}}
+                title= "Best Chicken Around You!!"
+                onPress = {this._handleButtonAsync(params.place.url)} />
+            </View>
+        );
+    }
+
+    _handleButtonAsync = async(url) => {
+        let result = await WebBrowser.openBrowserAsync(url)
+    }
 }
 
 const styles = StyleSheet.create({
@@ -182,6 +211,7 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign: 'center',
+        fontFamily: 'sans-serif',
         fontSize: 50,
         backgroundColor: 'transparent'
     },
@@ -208,6 +238,9 @@ const SimpleApp = StackNavigator({
     Chicken: {
         screen: ChickenScreen
 
+    },
+    FinalScreen: {
+        screen: FinalScreen
     }
 },
     { headerMode: 'none' }
