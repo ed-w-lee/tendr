@@ -1,0 +1,4 @@
+1° Add a refresh button to both apps. There's one in case of error, but it'd
+be nice to have one all the time.
+2° the android app sometimes creates more processes
+3° Add simulation to the desktop app
